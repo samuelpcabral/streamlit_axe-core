@@ -1,0 +1,2 @@
+streamlit==1.52.1
+axe-selenium-python==2.1.6
