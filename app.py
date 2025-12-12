@@ -77,8 +77,13 @@ if result:
         with st.expander(f"Total of {count} violations found.{blank_space}:blue[click to open]",
                          expanded=False, icon=":material/view_list:"):
             st.dataframe(result["violations"], height="content", row_height=50,
-                         column_order=["id", "impact", "description", "help", "helpUrl", "tags"],
+                         column_order=["id", "impact", "nodes_count", "description", "help", "helpUrl", "tags"],
                          column_config={
+                             "id": "Axe rule ID",
+                             "impact": "Impact",
+                             "description": "Description",
+                             "nodes_count": st.column_config.NumberColumn("Count"),
+                             "help": "Help",
                              "helpUrl": st.column_config.LinkColumn("Help URL"),
                              "tags": st.column_config.ListColumn("Tags")
                          }
@@ -91,7 +96,13 @@ if result:
                          column_order=["id", "impact", "failureSummary", "html", "target", "description", "help",
                                        "helpUrl", "nodes", "tags"],
                          column_config={
+                             "id": "Axe rule ID",
+                             "impact": "Impact",
                              "failureSummary": "Failure Summary",
+                             "html": "HTML",
+                             "target": "Target",
+                             "description": "Description",
+                             "help": "Help",
                              "helpUrl": st.column_config.LinkColumn("Help URL"),
                              "tags": st.column_config.ListColumn("Tags")
                          }

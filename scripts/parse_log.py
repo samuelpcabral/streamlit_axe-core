@@ -33,6 +33,7 @@ def get_violations(result_dict):
             }
             simplified_nodes.append(simplified_node)
         simplified_violation["nodes"] = simplified_nodes
+        simplified_violation["nodes_count"] = len(simplified_nodes)
         simplified_violations_list.append(simplified_violation)
     violations_dict = {"violations": simplified_violations_list}
     return violations_count, violations_dict
