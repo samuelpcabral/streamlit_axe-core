@@ -1,6 +1,8 @@
 import json
 
 
+# Function to use if debug for parsing axe.core result is needed, the json file with all fields
+# will be in the results folder, if debug is True inside run_axe_core.py file.
 def parse_log(log_file):
     with open(log_file, 'r') as f:
         log = f.read()
@@ -9,7 +11,6 @@ def parse_log(log_file):
 
 
 def get_violations(result_dict):
-    # log_json = parse_log(jsonfile)
     all_violations = result_dict.get('violations', [])
     violations_count = len(all_violations)
     simplified_violations_list = []
@@ -32,13 +33,14 @@ def get_violations(result_dict):
             }
             simplified_nodes.append(simplified_node)
         simplified_violation["nodes"] = simplified_nodes
+        simplified_violation["nodes_count"] = len(simplified_nodes)
         simplified_violations_list.append(simplified_violation)
     violations_dict = {"violations": simplified_violations_list}
     return violations_count, violations_dict
 
 
-def flatten_for_dataframe(violations_dict):
-    flattened_data = []
+def issues_for_dataframe(violations_dict):
+    issues_data = []
     all_violations = violations_dict.get('violations', [])
     for violation in all_violations:
         base_info = {
@@ -57,7 +59,7 @@ def flatten_for_dataframe(violations_dict):
                 "html": None,
                 "target": None
             })
-            flattened_data.append(row)
+            issues_data.append(row)
         else:
             for node in nodes:
                 row = base_info.copy()
@@ -66,5 +68,5 @@ def flatten_for_dataframe(violations_dict):
                     "html": node.get("html"),
                     "target": ", ".join(node.get("target", []))
                 })
-                flattened_data.append(row)
-    return flattened_data
+                issues_data.append(row)
+    return issues_data

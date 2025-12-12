@@ -1,7 +1,7 @@
 import streamlit as st
 from datetime import datetime
-from run_axe_core import execute_axe_core
-from parse_log import get_violations, flatten_for_dataframe
+from scripts.run_axe_core import execute_axe_core
+from scripts.parse_log import get_violations, issues_for_dataframe
 
 
 col1, col2, col3 = st.columns([1, 2, 1])
@@ -64,7 +64,7 @@ with col2:
                 st.session_state['log_history'] = new_log + st.session_state['log_history']
                 axe_core_result = execute_axe_core(url, mode=mode, device=device, width=width, height=height)
                 count, result = get_violations(axe_core_result)
-                elements = flatten_for_dataframe(result)
+                elements = issues_for_dataframe(result)
                 elements_count = len(elements)
                 new_log = f"[{timestamp}] Total of {count} violations found in {elements_count} elements\n"
                 st.session_state['log_history'] = new_log + st.session_state['log_history']
@@ -72,27 +72,41 @@ with col2:
 
 # Show results for each violation
 if result:
-    with st.expander(f"Total of {count} violations found", expanded=False, icon=":material/view_list:"):
-        st.write(f"Total of {count} violations found")
-        st.dataframe(result["violations"], height="content", row_height=50,
-                     column_order=["id", "impact", "description", "help", "helpUrl", "tags"],
-                     column_config={
-                         "helpUrl": st.column_config.LinkColumn("Help URL"),
-                         "tags": st.column_config.ListColumn("Tags")
-                     }
-                     )
+    blank_space = "&nbsp;" * 10
+    with st.spinner("#### Loading violations... :material/data_table: Please wait!"):
+        with st.expander(f"Total of {count} violations found.{blank_space}:blue[click to open]",
+                         expanded=False, icon=":material/view_list:"):
+            st.dataframe(result["violations"], height="content", row_height=50,
+                         column_order=["id", "impact", "nodes_count", "description", "help", "helpUrl", "tags"],
+                         column_config={
+                             "id": "Axe rule ID",
+                             "impact": "Impact",
+                             "description": "Description",
+                             "nodes_count": st.column_config.NumberColumn("Count"),
+                             "help": "Help",
+                             "helpUrl": st.column_config.LinkColumn("Help URL"),
+                             "tags": st.column_config.ListColumn("Tags")
+                         }
+                         )
 # Show result for each element with issues
-    with st.expander(f"Total of {elements_count} elements with issues", expanded=False, icon=":material/view_list:"):
-        st.write(f"Total of {elements_count} elements with issues")
-        st.dataframe(elements, height="content", row_height=50,
-                     column_order=["id", "impact", "failureSummary", "html", "target", "description", "help",
-                                   "helpUrl", "nodes", "tags"],
-                     column_config={
-                         "failureSummary": "Failure Summary",
-                         "helpUrl": st.column_config.LinkColumn("Help URL"),
-                         "tags": st.column_config.ListColumn("Tags")
-                     }
-                     )
+    with st.spinner("#### Loading all elements... :material/data_table: Please wait!"):
+        with st.expander(f"Total of {elements_count} elements with issues.{blank_space}:blue[click to open]",
+                         expanded=False, icon=":material/view_list:"):
+            st.dataframe(elements, height="content", row_height=50,
+                         column_order=["id", "impact", "failureSummary", "html", "target", "description", "help",
+                                       "helpUrl", "nodes", "tags"],
+                         column_config={
+                             "id": "Axe rule ID",
+                             "impact": "Impact",
+                             "failureSummary": "Failure Summary",
+                             "html": "HTML",
+                             "target": "Target",
+                             "description": "Description",
+                             "help": "Help",
+                             "helpUrl": st.column_config.LinkColumn("Help URL"),
+                             "tags": st.column_config.ListColumn("Tags")
+                         }
+                         )
 
 st.markdown("---")
 
