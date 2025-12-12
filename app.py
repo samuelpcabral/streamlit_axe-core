@@ -1,7 +1,7 @@
 import streamlit as st
 from datetime import datetime
-from run_axe_core import execute_axe_core
-from parse_log import get_violations, flatten_for_dataframe
+from scripts.run_axe_core import execute_axe_core
+from scripts.parse_log import get_violations, issues_for_dataframe
 
 
 col1, col2, col3 = st.columns([1, 2, 1])
@@ -64,7 +64,7 @@ with col2:
                 st.session_state['log_history'] = new_log + st.session_state['log_history']
                 axe_core_result = execute_axe_core(url, mode=mode, device=device, width=width, height=height)
                 count, result = get_violations(axe_core_result)
-                elements = flatten_for_dataframe(result)
+                elements = issues_for_dataframe(result)
                 elements_count = len(elements)
                 new_log = f"[{timestamp}] Total of {count} violations found in {elements_count} elements\n"
                 st.session_state['log_history'] = new_log + st.session_state['log_history']

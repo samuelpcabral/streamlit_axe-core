@@ -37,8 +37,8 @@ def get_violations(result_dict):
     return violations_count, violations_dict
 
 
-def flatten_for_dataframe(violations_dict):
-    flattened_data = []
+def issues_for_dataframe(violations_dict):
+    issues_data = []
     all_violations = violations_dict.get('violations', [])
     for violation in all_violations:
         base_info = {
@@ -57,7 +57,7 @@ def flatten_for_dataframe(violations_dict):
                 "html": None,
                 "target": None
             })
-            flattened_data.append(row)
+            issues_data.append(row)
         else:
             for node in nodes:
                 row = base_info.copy()
@@ -66,5 +66,5 @@ def flatten_for_dataframe(violations_dict):
                     "html": node.get("html"),
                     "target": ", ".join(node.get("target", []))
                 })
-                flattened_data.append(row)
-    return flattened_data
+                issues_data.append(row)
+    return issues_data
