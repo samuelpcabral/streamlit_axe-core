@@ -1,6 +1,8 @@
 import json
 
 
+# Function to use if debug for parsing axe.core result is needed, the json file with all fields
+# will be in the results folder, if debug is True inside run_axe_core.py file.
 def parse_log(log_file):
     with open(log_file, 'r') as f:
         log = f.read()
@@ -9,7 +11,6 @@ def parse_log(log_file):
 
 
 def get_violations(result_dict):
-    # log_json = parse_log(jsonfile)
     all_violations = result_dict.get('violations', [])
     violations_count = len(all_violations)
     simplified_violations_list = []

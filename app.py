@@ -72,27 +72,30 @@ with col2:
 
 # Show results for each violation
 if result:
-    with st.expander(f"Total of {count} violations found", expanded=False, icon=":material/view_list:"):
-        st.write(f"Total of {count} violations found")
-        st.dataframe(result["violations"], height="content", row_height=50,
-                     column_order=["id", "impact", "description", "help", "helpUrl", "tags"],
-                     column_config={
-                         "helpUrl": st.column_config.LinkColumn("Help URL"),
-                         "tags": st.column_config.ListColumn("Tags")
-                     }
-                     )
+    blank_space = "&nbsp;" * 10
+    with st.spinner("#### Loading violations... :material/data_table: Please wait!"):
+        with st.expander(f"Total of {count} violations found.{blank_space}:blue[click to open]",
+                         expanded=False, icon=":material/view_list:"):
+            st.dataframe(result["violations"], height="content", row_height=50,
+                         column_order=["id", "impact", "description", "help", "helpUrl", "tags"],
+                         column_config={
+                             "helpUrl": st.column_config.LinkColumn("Help URL"),
+                             "tags": st.column_config.ListColumn("Tags")
+                         }
+                         )
 # Show result for each element with issues
-    with st.expander(f"Total of {elements_count} elements with issues", expanded=False, icon=":material/view_list:"):
-        st.write(f"Total of {elements_count} elements with issues")
-        st.dataframe(elements, height="content", row_height=50,
-                     column_order=["id", "impact", "failureSummary", "html", "target", "description", "help",
-                                   "helpUrl", "nodes", "tags"],
-                     column_config={
-                         "failureSummary": "Failure Summary",
-                         "helpUrl": st.column_config.LinkColumn("Help URL"),
-                         "tags": st.column_config.ListColumn("Tags")
-                     }
-                     )
+    with st.spinner("#### Loading all elements... :material/data_table: Please wait!"):
+        with st.expander(f"Total of {elements_count} elements with issues.{blank_space}:blue[click to open]",
+                         expanded=False, icon=":material/view_list:"):
+            st.dataframe(elements, height="content", row_height=50,
+                         column_order=["id", "impact", "failureSummary", "html", "target", "description", "help",
+                                       "helpUrl", "nodes", "tags"],
+                         column_config={
+                             "failureSummary": "Failure Summary",
+                             "helpUrl": st.column_config.LinkColumn("Help URL"),
+                             "tags": st.column_config.ListColumn("Tags")
+                         }
+                         )
 
 st.markdown("---")
 
